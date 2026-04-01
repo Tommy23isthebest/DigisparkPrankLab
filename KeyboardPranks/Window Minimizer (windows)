@@ -1,0 +1,12 @@
+#include <DigiKeyboard.h>
+
+void setup() {
+  DigiKeyboard.delay(5000);
+}
+
+void loop() {
+  DigiKeyboard.delay(300000); // every 5 minutes
+
+  // Win+Down = minimise active window
+  DigiKeyboard.sendKeyStroke(KEY_ARROW_DOWN, MOD_GUI_LEFT);
+}
