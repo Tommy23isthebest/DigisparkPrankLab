@@ -160,6 +160,109 @@ These sketches are for **educational use, escape rooms, and pranks on people who
 
 - Full Arduino Prank Lab web app (18+ pranks, Uno/Nano/Mega/Leonardo/ESP32): see the companion web app
 - IRremote TV-B-Gone sketch (turns off any TV): see `ir_blaster/` folder
+2. Wait for: `Please plug in the device ...`
+3. **Then** plug the Digispark into USB
+4. Done — the sketch is flashed
+
+You have ~8 seconds after plugging in before the bootloader hands off to your sketch.
+
+---
+
+## Pranks
+
+---
+
+### Window Minimiser
+
+**Target: Mac** | Every 5 minutes silently sends `Cmd+M`, collapsing whatever the victim is working in. Completely invisible — no popup, no sound, no indicator. They'll question everything.
+
+```cpp
+#include <DigiKeyboard.h>
+
+void setup() {
+  DigiKeyboard.delay(5000);
+}
+
+void loop() {
+  DigiKeyboard.delay(300000); // 5 minutes
+
+  DigiKeyboard.sendKeyStroke(KEY_M, MOD_GUI_LEFT); // Cmd+M
+}
+```
+
+**Tips:**
+- Plug into a hidden USB port (back of iMac, USB hub under desk)
+- Works on any windowed app — browser, editor, terminal, Finder
+- Fullscreen apps are immune — works best when victim has multiple windows open
+
+**Change the interval:**
+
+| Interval | Value |
+|----------|-------|
+| 1 min | `60000` |
+| 5 min | `300000` |
+| 10 min | `600000` |
+
+---
+
+### USB Mouse Teleporter
+
+**Target: Mac / Windows / Linux** | Acts as a USB mouse. Every 10 minutes hurls the cursor a massive random distance — up to 4000px horizontally, 3000px vertically. Cursor flies clean off the screen.
+
+```cpp
+#include <DigiMouse.h>
+
+void setup() {
+  DigiMouse.begin();
+}
+
+void loop() {
+  DigiMouse.delay(600000); // 10 minutes
+
+  int dx = random(-4000, 4001);
+  int dy = random(-3000, 3001);
+
+  int moved_x = 0;
+  int moved_y = 0;
+  while (moved_x != dx || moved_y != dy) {
+    int sx = constrain(dx - moved_x, -127, 127);
+    int sy = constrain(dy - moved_y, -127, 127);
+    DigiMouse.move(sx, sy, 0);
+    moved_x += sx;
+    moved_y += sy;
+    DigiMouse.delay(5);
+  }
+}
+```
+
+**Library required:** Search `DigiMouse` in Arduino Library Manager → install.
+
+---
+
+## Troubleshooting
+
+| Error | Fix |
+|-------|-----|
+| `digispark` not in board list | Add the boards URL from Setup step 1 |
+| `digistump.com` returns 404 | Use the GitHub mirror URL — the original site is down |
+| `dyld: Library not loaded: libusb-0.1.4.dylib` | Follow the Apple Silicon libusb fix in Setup step 4 |
+| `Directory not empty` during brew install | Run `sudo rm -rf /usr/local/opt/libusb-compat` then reinstall |
+| Upload times out | Plug in faster after the prompt — you have ~8 seconds |
+| Nothing happens on target | Check the board ran setup delay (5s) and the loop delay passed |
+| `Mouse` / `Keyboard` not declared | Those only work on ATMEGA32U4 (Leonardo/Micro) — not Digispark. Use DigiMouse / DigiKeyboard |
+
+---
+
+## Legal & Ethics
+
+These sketches are for **educational use, escape rooms, and pranks on people who have given consent**. Do not use on computers you don't own or have explicit permission to access.
+
+---
+
+## Related
+
+- Full Arduino Prank Lab web app (18+ pranks, Uno/Nano/Mega/Leonardo/ESP32): see the companion web app
+- IRremote TV-B-Gone sketch (turns off any TV): see `ir_blaster/` folder
 
 ---
 
