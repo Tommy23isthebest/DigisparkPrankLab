@@ -26,7 +26,7 @@ void loop() {
   DigiKeyboard.delay(400);
 
   // Cmd+M = minimise current window (Mac)
-  DigiKeyboard.sendKeyStroke(KEY_M, MOD_GUI_LEFT);
+  DigiKeyboard.sendKeyStroke(KEY_M, 0x51);
 
   // Ramp down interval, stop at minimum
   if (interval > MIN_INTERVAL) {
