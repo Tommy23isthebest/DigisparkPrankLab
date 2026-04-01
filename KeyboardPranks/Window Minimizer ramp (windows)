@@ -1,0 +1,33 @@
+#include <DigiKeyboard.h>
+
+unsigned long interval = 2100000UL; // start: 35 minutes
+const unsigned long MIN_INTERVAL = 300000UL; // floor: 5 minutes
+const unsigned long STEP = 360000UL; // 35→29→23→17→11→5 over 2hrs
+
+void waitMs(unsigned long ms) {
+  while (ms > 60000UL) {
+    DigiKeyboard.delay(60000);
+    ms -= 60000UL;
+  }
+  if (ms > 0) DigiKeyboard.delay((unsigned int)ms);
+}
+
+void setup() {
+  DigiKeyboard.delay(5000);
+}
+
+void loop() {
+  waitMs(interval);
+
+  // F11 exits fullscreen in most Windows apps — does nothing if not fullscreen
+  DigiKeyboard.sendKeyStroke(KEY_F11);
+  DigiKeyboard.delay(400);
+
+  // Win+Down = minimise active window (Windows)
+  DigiKeyboard.sendKeyStroke(KEY_ARROW_DOWN, MOD_GUI_LEFT);
+
+  if (interval > MIN_INTERVAL) {
+    interval -= STEP;
+    if (interval < MIN_INTERVAL) interval = MIN_INTERVAL;
+  }
+}
