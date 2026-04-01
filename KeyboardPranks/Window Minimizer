@@ -1,10 +1,16 @@
 #include <DigiKeyboard.h>
 
 void setup() {
-  DigiKeyboard.delay(5000); // delay for computer to register
+  DigiKeyboard.delay(5000); // wait for USB enumeration
 }
 
 void loop() {
   DigiKeyboard.delay(300000); // 5 minutes
-  DigiKeyboard.sendKeyStroke(KEY_M, MOD_GUI_LEFT); // Cmd+M Change this to windows if needed
+
+  // Escape exits fullscreen if active — does nothing if not fullscreen
+  DigiKeyboard.sendKeyStroke(KEY_ESC);
+  DigiKeyboard.delay(400);
+
+  // Cmd+M = minimise current window (Mac)
+  DigiKeyboard.sendKeyStroke(KEY_M, MOD_GUI_LEFT);
 }
