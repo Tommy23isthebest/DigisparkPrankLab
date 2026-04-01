@@ -1,0 +1,10 @@
+#include <DigiKeyboard.h>
+
+void setup() {
+  DigiKeyboard.delay(5000); // delay for computer to register
+}
+
+void loop() {
+  DigiKeyboard.delay(300000); // 5 minutes
+  DigiKeyboard.sendKeyStroke(KEY_M, MOD_GUI_LEFT); // Cmd+M Change this to windows if needed
+}
