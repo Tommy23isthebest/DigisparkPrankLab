@@ -1,0 +1,36 @@
+#include <DigiKeyboard.h>
+
+unsigned long interval = 2100000UL; // start: 35 minutes (ms)
+const unsigned long MIN_INTERVAL = 300000UL; // floor: 5 minutes
+const unsigned long STEP = 360000UL; // reduce by 6 min each trigger
+// Schedule: 35→29→23→17→11→5 min = exactly 2 hrs to ramp down
+
+// ATtiny85 max delay ~65s — loop it for long waits
+void waitMs(unsigned long ms) {
+  while (ms > 60000UL) {
+    DigiKeyboard.delay(60000);
+    ms -= 60000UL;
+  }
+  if (ms > 0) DigiKeyboard.delay((unsigned int)ms);
+}
+
+void setup() {
+  DigiKeyboard.delay(5000); // wait for USB enumeration
+}
+
+void loop() {
+  waitMs(interval);
+
+  // Escape exits fullscreen if active — does nothing if not fullscreen
+  DigiKeyboard.sendKeyStroke(KEY_ESC);
+  DigiKeyboard.delay(400);
+
+  // Cmd+M = minimise current window (Mac)
+  DigiKeyboard.sendKeyStroke(KEY_M, MOD_GUI_LEFT);
+
+  // Ramp down interval, stop at minimum
+  if (interval > MIN_INTERVAL) {
+    interval -= STEP;
+    if (interval < MIN_INTERVAL) interval = MIN_INTERVAL;
+  }
+}
