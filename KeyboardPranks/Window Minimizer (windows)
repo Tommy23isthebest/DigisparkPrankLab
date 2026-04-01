@@ -7,6 +7,6 @@ void setup() {
 void loop() {
   DigiKeyboard.delay(300000); // every 5 minutes
 
-  // Win+Down = minimise active window
-  DigiKeyboard.sendKeyStroke(KEY_ARROW_DOWN, MOD_GUI_LEFT);
+  // Win+Down = minimise active window (0x51 = Down Arrow HID keycode)
+  DigiKeyboard.sendKeyStroke(0x51, MOD_GUI_LEFT);
 }
